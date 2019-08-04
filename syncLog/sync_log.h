@@ -15,9 +15,23 @@ do\
     Log::inst()->init_path(dir,file_name);\
 }while(0)
 
-#define DEBUG Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " 
-#define ERROR Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " 
-#define INFO Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " 
+#define DEBUG(x)\
+do\
+{\
+    Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+}while(0) 
+
+#define ERROR(x)\
+do\
+{\
+    Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+}while(0)
+
+#define INFO(x)\
+do\
+{\
+    Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+}while(0)
 
 using namespace std;
 class Log
