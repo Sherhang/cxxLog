@@ -6,6 +6,7 @@
 
 std::mutex _mtx;//这个变量是为了在h中使用
 Log *Log::_inst = new Log();//饿汉模式,NULL懒汉模式
+
 void Log::init_path(const string &dir, const string &file_name)
 {
     _dir = dir;
@@ -55,7 +56,6 @@ bool Log::openfile(const string &file_name)
     }
     else
         dir_file = _dir + file_name;
-    //cout<<file_name<<endl;
     _file.open(dir_file.c_str(), ios::app); //追加写入
     return true;
 }

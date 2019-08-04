@@ -1,8 +1,6 @@
 CXX = g++ -std=c++11
 
 src = $(wildcard *.cpp)
-head = $(wildcard *.h)
-obj = $(patsubst %.cpp, %.o, $(wildcard demo*.cpp)) 
 target = $(patsubst %.cpp, %, $(wildcard demo*.cpp))  #目标文件是所有demo*的 
 rely = sync_log.cpp 
 
