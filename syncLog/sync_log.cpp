@@ -4,6 +4,7 @@
 #include <sys/time.h> //struct timeval
 #include <time.h>     //struct tm
 
+std::mutex _mtx;//这个变量是为了在h中使用
 Log *Log::_inst = new Log();//饿汉模式,NULL懒汉模式
 void Log::init_path(const string &dir, const string &file_name)
 {

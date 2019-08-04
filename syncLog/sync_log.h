@@ -1,39 +1,75 @@
 /*
  * 同步日志系统
- * 多线程使用c++11的std::thread
+ * 多线程使用c++11的std::thread和mutex
  * */
+#pragma once
 #include<iostream>
 #include<fstream>
 #include<sstream>
 #include<unistd.h>
 #include<sys/time.h>
 #include<sys/stat.h>
+#include<mutex>
+
+using namespace std;
+extern std::mutex _mtx;//为了防止多次包含，cpp中定义，h中用extern
 
 #define LOGINIT(dir,file_name) \
 do\
 {\
-    Log::inst()->init_path(dir,file_name);\
+    if(_mtx.try_lock())\
+    {\
+        Log::inst()->init_path(dir,file_name);\
+        _mtx.unlock();\
+    }\
+    else\
+    {\
+        cout<<"lock"<<endl;\
+    }\
 }while(0)
 
 #define DEBUG(x)\
 do\
 {\
-    Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+    if(_mtx.try_lock())\
+    {\
+        Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+        _mtx.unlock();\
+    }\
+    else\
+    {\
+        cout<<"lock"<<endl;\
+    }\
 }while(0) 
 
 #define ERROR(x)\
 do\
 {\
-    Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+     if(_mtx.try_lock())\
+    {\
+        Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+        _mtx.unlock();\
+    }\
+    else\
+    {\
+        cout<<"lock"<<endl;\
+    }\
 }while(0)
 
 #define INFO(x)\
 do\
 {\
-    Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+     if(_mtx.try_lock())\
+    {\
+        Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+        _mtx.unlock();\
+    }\
+    else\
+    {\
+        cout<<"lock"<<endl;\
+    }\
 }while(0)
 
-using namespace std;
 class Log
 {
 private:

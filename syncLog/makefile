@@ -8,7 +8,7 @@ rely = sync_log.cpp
 
 
 INCS = 
-LIBS =  
+LIBS = -lpthread 
 
 CFLAGS += -g 
 
