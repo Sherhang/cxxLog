@@ -25,7 +25,7 @@ do\
 #define DEBUG(x)\
 do\
 {\
-    while(!_mtx.try_lock());\
+    _mtx.lock();\
     Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0) 
@@ -33,7 +33,7 @@ do\
 #define ERROR(x)\
 do\
 {\
-    while(!_mtx.try_lock());\
+    _mtx.lock();\
     Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0)
@@ -41,7 +41,7 @@ do\
 #define INFO(x)\
 do\
 {\
-    while(!_mtx.try_lock());\
+    _mtx.lock();\
     Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0)
