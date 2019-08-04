@@ -51,6 +51,7 @@ public:
             //cout<<"inst is NULL , create "<<endl;
             _inst = new Log();
         }
+        //cout<<"get inst"<<endl;
         return _inst;
     }
    

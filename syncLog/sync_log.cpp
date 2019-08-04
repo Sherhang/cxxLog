@@ -4,7 +4,7 @@
 #include <sys/time.h> //struct timeval
 #include <time.h>     //struct tm
 
-Log *Log::_inst = NULL;
+Log *Log::_inst = new Log();//饿汉模式,NULL懒汉模式
 void Log::init_path(const string &dir, const string &file_name)
 {
     _dir = dir;
