@@ -8,7 +8,8 @@ using namespace std;
 
 void display(int id)
 {
-    for(int i=0;i<1e3;++i)
+    for(int i=0;i<1e6;++i)
+
     {
         DEBUG(<<"This is a test! ID is "<<id<<endl);
     }

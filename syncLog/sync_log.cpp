@@ -19,9 +19,9 @@ void Log::init_path(const string &dir, const string &file_name)
         _file_name = file_name;
     }
     
-    _file_name = get_curr_time().substr(0, 8) + _file_name;//20180809logname.log. log update everyday.
+    string file_name_tmp = get_curr_time().substr(0, 8) + _file_name;//20180809logname.log. log update everyday.
     makedir(_dir);
-    openfile(_file_name);
+    openfile(file_name_tmp);
 }
 
 bool Log::makedir(const std::string &dir)
@@ -56,6 +56,7 @@ bool Log::openfile(const string &file_name)
     }
     else
         dir_file = _dir + file_name;
+    //cout<<"file_name "<<dir_file<<endl;
     _file.open(dir_file.c_str(), ios::app); //追加写入
     return true;
 }
@@ -88,4 +89,34 @@ string Log::get_curr_time()
         sec = "0" + sec;
     ret = year + mon + mday + "|" + hour + ":" + min + ":" + sec;
     return ret;
+}
+
+//友元函数用于每天刷新
+void flush_filename(int signal)
+{
+    _mtx.lock();//一定要保证当前没有写操作
+    Log::inst()->_file.close();
+    string file_name = Log::inst()->get_curr_time().substr(0,8) + Log::inst()->_file_name;//20180809|12:12:13 14到分钟
+    //cout<<"get a signal "<<signal<<endl;
+    Log::inst()->openfile(file_name);
+    _mtx.unlock();
+}
+
+bool set_time()
+{
+    struct itimerval value, ovalue;
+    string time_now = __TIME__;
+    //cout<<"time_now "<<time_now<<endl;
+    uint64_t hour_now = str2num<uint64_t>(time_now.substr(0,2));
+    uint64_t min_now = str2num<uint64_t>(time_now.substr(3,2));
+    uint64_t sec_now = str2num<uint64_t>(time_now.substr(6,2));
+    value.it_value.tv_sec =  24*36000-(hour_now*3600+min_now*60+sec_now);//当天剩余时间
+    value.it_value.tv_usec = 0;
+    value.it_interval.tv_sec = 24*3600;//间隔一天
+    value.it_interval.tv_usec = 0;
+    //cout<<"invoke signal, setitimer"<<endl;
+    signal(SIGALRM, flush_filename);
+    setitimer(ITIMER_REAL, &value, &ovalue);//set 
+    for(;;);
+    return true;
 }
