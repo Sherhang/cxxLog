@@ -70,6 +70,7 @@ string Log::get_curr_time()
     struct tm curr_time;
     localtime_r((time_t *)&sys_sec, &curr_time); //setp2
     string ret;
+    //用snprintf()来格式化效率低
     string year, mon, mday, hour, min, sec;
     year = num2str<uint64_t>(curr_time.tm_year + 1900);
     mon = num2str<uint64_t>(curr_time.tm_mon + 1);
@@ -95,6 +96,7 @@ string Log::get_curr_time()
 void flush_filename(int signal)
 {
     _mtx.lock();//一定要保证当前没有写操作
+    Log::inst()->_file.clear();//清除状态标识符
     Log::inst()->_file.close();
     string file_name = Log::inst()->get_curr_time().substr(0,8) + Log::inst()->_file_name;//20180809|12:12:13 14到分钟
     //cout<<"get a signal "<<signal<<endl;
@@ -105,12 +107,13 @@ void flush_filename(int signal)
 bool set_time()
 {
     struct itimerval value, ovalue;
-    string time_now = __TIME__;
+    string time_now = Log::inst()->get_curr_time();
+    time_now = time_now.substr(9);
     //cout<<"time_now "<<time_now<<endl;
     uint64_t hour_now = str2num<uint64_t>(time_now.substr(0,2));
     uint64_t min_now = str2num<uint64_t>(time_now.substr(3,2));
     uint64_t sec_now = str2num<uint64_t>(time_now.substr(6,2));
-    value.it_value.tv_sec =  24*36000-(hour_now*3600+min_now*60+sec_now);//当天剩余时间
+    value.it_value.tv_sec = 24*3600-(hour_now*3600+min_now*60+sec_now);//当天剩余时间
     value.it_value.tv_usec = 0;
     value.it_interval.tv_sec = 24*3600;//间隔一天
     value.it_interval.tv_usec = 0;

@@ -85,7 +85,7 @@ do\
 do\
 {\
     _mtx.lock();\
-    Log::inst()->_file<<"[DEBUG]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+    Log::inst()->_file<<"[DEBUG]"<<Log::inst()->get_curr_time()<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0) 
 
@@ -93,7 +93,7 @@ do\
 do\
 {\
     _mtx.lock();\
-    Log::inst()->_file<<"[ERROR]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+    Log::inst()->_file<<"[ERROR]"<<Log::inst()->get_curr_time()<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0)
 
@@ -101,7 +101,7 @@ do\
 do\
 {\
     _mtx.lock();\
-    Log::inst()->_file<<"[INFO ]"<<__DATE__<<"|"<<__TIME__<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
+    Log::inst()->_file<<"[INFO ]"<<Log::inst()->get_curr_time()<<"|"<<__FILE__<<"|"<<__func__<<"|"<<__LINE__<<": " x;\
     _mtx.unlock();\
 }while(0)
 
