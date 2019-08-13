@@ -63,10 +63,11 @@ bool Log::openfile(const string &file_name)
 
 string Log::get_curr_time()
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL); //step1
-    uint64_t sys_sec = tv.tv_sec;
+    //struct timeval tv;
+    //gettimeofday(&tv, NULL); //step1
+    //uint64_t sys_sec = tv.tv_sec;
     //DEBUG<<"sys_sec="<<sys_sec<<endl;
+    time_t sys_sec= time(NULL);
     struct tm curr_time;
     localtime_r((time_t *)&sys_sec, &curr_time); //setp2
     string ret;
